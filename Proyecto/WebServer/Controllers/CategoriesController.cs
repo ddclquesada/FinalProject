@@ -1,4 +1,5 @@
 using BookStore.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +18,8 @@ namespace WebServer.Controllers {
     
     [ApiController]
     [Route (ROUTE)]
-    public class CategoriesController : Controller {
+	[Authorize]
+	public class CategoriesController : Controller {
         public const string ROUTE = "/api/[Controller]";
         public static string CONTROLLER_NAME = "Categories";
 
