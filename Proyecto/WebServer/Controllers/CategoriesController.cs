@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using WebServer.Data;
+using WebServer.ViewModels;
 
 namespace WebServer.Controllers {
     
@@ -57,6 +58,21 @@ namespace WebServer.Controllers {
             };
 
             return result;
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] CategoryViewModel[] viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            foreach (var item in viewModel)
+            {
+                Repository.Add(item);
+            }
+
+            return Ok();
         }
 
         [HttpPut("{id}")]

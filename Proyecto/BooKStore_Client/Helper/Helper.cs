@@ -46,7 +46,7 @@ namespace BooKStore_Client.Helper
         public async Task<List<T>> RequestById(string APIName, int Id)
         {
 
-            IEnumerable<T> EmpInfo = null;
+            List<T> EmpInfo = null;
 
             using (var client = new HttpClient())
             {
@@ -58,20 +58,20 @@ namespace BooKStore_Client.Helper
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 //Sending request to find web api REST service resource GetAllEmployees using HttpClient  
-                HttpResponseMessage Res = await client.GetAsync(APIName+ "/" + Id.ToString());
+                HttpResponseMessage Res = await client.GetAsync(APIName+ $"/{Id}");
 
                 //Checking the response is successful or not which is sent using HttpClient  
                 if (Res.IsSuccessStatusCode)
                 {
                     //Storing the response details recieved from web api   
-                    var EmpResponse = Res.Content.ReadAsStringAsync().Result;
+                    var data = Res.Content.ReadAsStringAsync().Result;
 
                     //Deserializing the response recieved from web api and storing into the Employee list  
-                    EmpInfo = JsonConvert.DeserializeObject<List<T>>(EmpResponse);
+                    EmpInfo = JsonConvert.DeserializeObject<List<T>>(data);
 
                 }
                 //returning the employee list to view  
-                return EmpInfo.ToList();
+                return EmpInfo;
             }
 
         }

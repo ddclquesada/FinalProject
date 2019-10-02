@@ -93,17 +93,8 @@ namespace WebServer.Controllers
                 match.Name,
                 match.Pagecount,
                 match.Point,
-                Author = new
-                {
-                    match.Author.AuthorId,
-                    Name = match.Author.Name + " " + match.Author.Surname,
-
-                },
-                Category = new
-                {
-                    match.Category.CategoryId,
-                    match.Category.Name
-                }
+                match.AuthorId,
+                match.CategoryId,
             };
 
             return Ok(result);

@@ -8,24 +8,22 @@ using BooKStore_Client.Helper;
 using BookStore.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace BooKStore_Client.Controllers
+namespace Reviewstore_Client.Controllers
 {
-    public class BookController : Controller
+    public class ReviewController : Controller
     {
         private object categoryList = new object();
         private object authorList = new object();
         // GET: Book
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            await LoadInitialData();
             return View();
         }
 
      
         // GET: Book/Create
-        public async Task<ActionResult> Create()
+        public ActionResult Create()
         {
-            await LoadInitialData();
             return View();
         }
 
@@ -37,7 +35,7 @@ namespace BooKStore_Client.Controllers
             try
             {
                 var book = new Helper<Book>();
-                book.Post("Books", collection);
+                book.Post("Reviews", collection);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -50,10 +48,8 @@ namespace BooKStore_Client.Controllers
         // GET: Book/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            await LoadInitialData();
-
             var helper = new Helper<Book>();
-            List<Book> bookObject = await helper.Request("Books/" + $"{id}");
+            List<Book> bookObject = await helper.Request("Reviews" + $"/{id}");
             
             return View(bookObject.FirstOrDefault());
         }
@@ -91,7 +87,7 @@ namespace BooKStore_Client.Controllers
             {
                 // TODO: Add delete logic here
                 var book = new Helper<Book>();
-                book.Delete("Books", id);
+                book.Delete("Reviews", id);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -100,14 +96,5 @@ namespace BooKStore_Client.Controllers
             }
         }
 
-        private async Task LoadInitialData() {
-            var category = new Helper<Category>();
-            List<Category> catList = await category.Request("Categories");
-            ViewBag.categoryList = new SelectList(catList.Select(c => new { c.CategoryId, c.Name }), "CategoryId","Name");
-
-            var author = new Helper<Author>();
-            List<Author> authorList = await author.Request("Author");
-            ViewBag.authorList = new SelectList(authorList.Select(a => new { a.AuthorId, a.Name}), "AuthorId", "Name");
-        }
     }
 }

@@ -1,3 +1,4 @@
+using BookStore.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using WebServer.Data;
+using WebServer.ViewModels;
 
 namespace WebServer.Controllers {
     
@@ -53,6 +55,43 @@ namespace WebServer.Controllers {
             };
 
             return result;
+        }
+
+
+        [HttpPost]
+        public IActionResult Post([FromBody] AuthorViewModel[] viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            foreach (var item in viewModel)
+            {
+                Repository.Add(item);
+            }
+
+            return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult Put([FromRoute] int id, [FromBody] Author viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var model = Repository.Get(id);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+            model.Name = viewModel.Name;
+            model.Surname = viewModel.Surname;
+            
+            Repository.Update(id, model);
+
+            return Ok();
         }
     }
 }
