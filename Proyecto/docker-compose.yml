@@ -1,0 +1,46 @@
+version: "3.4"
+services:
+  webServer:
+    image: ${DOCKER_REGISTRY-}webserver
+    build:
+      context: ./WebServer
+      dockerfile: Dockerfile
+    hostname: WebServer
+    container_name: WebServer
+    restart: always
+    depends_on:
+      - database
+    ports:
+      - "5002:80"
+      - "5003:443"
+    environment:
+      BookStoreDatabase: "Data Source=database;Initial Catalog=BookStore;User ID=sa;Password=P@ssw0rd.123;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+  
+  database:
+    image: ${DOCKER_REGISTRY-}bookstore:latest
+    build:
+      context: ./database/Bookstore
+      dockerfile: Dockerfile
+    hostname: ProjectDbdocker
+    container_name: ProjectDb
+    restart: unless-stopped
+    environment:
+      MSSQL_SA_PASSWORD: P@ssw0rd.123
+      SA_PASSWORD: P@ssw0rd.123
+      MSSQL_TCP_PORT: 1433
+      ACCEPT_EULA: Y
+      MSSQL_PID: Developer
+      MSSQL_AGENT_ENABLED: 'false'
+      MSSQL_DATA_DIR: "/var/opt/mssql/data"
+      MSSQL_LOG_DIR: "/var/opt/mssql/log"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql/data
+      - sqllog:/var/opt/mssql/log
+
+volumes:
+  sqldata: {}
+  sqllog: {}
+#  webClient: {}
+#  webServer: {}

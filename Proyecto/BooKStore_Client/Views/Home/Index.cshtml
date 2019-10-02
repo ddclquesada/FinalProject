@@ -1,0 +1,61 @@
+﻿@model IEnumerable<BookStore.Models.Book>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>
+        @Html.ActionLink("Add new book", "Create", "Book")    |
+    </p>
+    <table class="table">
+        <thead>
+            <tr style="text-align:left">
+                <th>
+                    Book Name
+                </th>
+                <th style="width:100px;text-align:center">
+                    Page count
+                </th>
+                <th style="width:100px;text-align:center">
+                    Points
+                </th>
+                <th>
+                    Author
+                </th>
+                <th>
+                    Category
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr style="text-align:left">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td style="width:100px; text-align:center">
+                        @Html.DisplayFor(modelItem => item.Pagecount)
+                    </td>
+                    <td style="width:100px;text-align:center">
+                        @Html.DisplayFor(modelItem => item.Point)
+                    </td>
+                    <td style="width:200px">
+                        @Html.DisplayFor(modelItem => item.Author.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category.Name)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", "Book", new {  id=item.BookId  })    |
+                        @Html.ActionLink("Delete", "Delete","Book", new {  id=item.BookId })   |
+                        @Html.ActionLink("Review", "Review", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
